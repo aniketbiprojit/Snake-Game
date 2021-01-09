@@ -1,9 +1,12 @@
 import App from './App.svelte'
 import { Cell } from './Cell'
 
-const rows = 20
-const cols = 20
+const rows = 10
+const cols = 10
 const size = 40
+const updateTime = 150
+
+let score = 0
 
 const app = new App({
 	target: document.body,
@@ -11,8 +14,13 @@ const app = new App({
 		rows,
 		cols,
 		handleKeyPress,
+		score,
 	},
 })
+
+function updateScore() {
+	document.getElementById('score').innerHTML = score.toString()
+}
 
 const grid: Array<Array<Cell>> = Array.from(Array(rows), () => Array(cols))
 
@@ -58,7 +66,7 @@ class Snake {
 
 	constructor() {
 		this.draw_snake(0, 0)
-		setInterval(() => this.update(), 100)
+		setInterval(() => this.update(), updateTime)
 	}
 
 	draw_snake(x: number, y: number) {
@@ -66,7 +74,14 @@ class Snake {
 		if (old_cell.marked) {
 			old_cell.unmark()
 		}
-		grid[this.head.x][this.head.y].mark()
+		const new_cell = grid[this.head.x][this.head.y]
+		if (new_cell.food) {
+			new_cell.eatFood()
+			score++
+			updateScore()
+			placeFood()
+		}
+		new_cell.mark()
 	}
 
 	update() {
@@ -79,6 +94,13 @@ class Snake {
 }
 
 const snake = new Snake()
+
+function placeFood() {
+	const x = Math.floor(Math.random() * rows) % rows
+	const y = Math.floor(Math.random() * cols) % cols
+
+	grid[x][y].placeFood()
+}
 
 function handleKeyPress(e: KeyboardEvent) {
 	if (e.ctrlKey === false) {
@@ -94,7 +116,8 @@ function handleKeyPress(e: KeyboardEvent) {
 	} else if (e.key === 'ArrowRight') {
 		snake.towards = { x: 0, y: 1 }
 	}
-	// console.log(e)
 }
+
+placeFood()
 
 export default app
