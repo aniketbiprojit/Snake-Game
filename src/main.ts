@@ -72,7 +72,7 @@ class Snake {
 		const { x, y } = this.head
 		this.head.x = (this.head.x + this.towards.x + rows) % rows
 		this.head.y = (this.head.y + this.towards.y + cols) % cols
-		console.log(this.head)
+		// console.log(this.head)
 		this.draw_snake(x, y)
 	}
 }
