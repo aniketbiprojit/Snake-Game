@@ -1,9 +1,9 @@
 import App from './App.svelte'
 import { Cell } from './Cell'
 
-const rows = 50
-const cols = 50
-const size = 15
+const rows = 20
+const cols = 20
+const size = 40
 
 const app = new App({
 	target: document.body,
@@ -81,6 +81,10 @@ class Snake {
 const snake = new Snake()
 
 function handleKeyPress(e: KeyboardEvent) {
+	if (e.ctrlKey === false) {
+		e.preventDefault()
+	}
+
 	if (e.key === 'ArrowDown') {
 		snake.towards = { x: 1, y: 0 }
 	} else if (e.key === 'ArrowUp') {
@@ -90,6 +94,7 @@ function handleKeyPress(e: KeyboardEvent) {
 	} else if (e.key === 'ArrowRight') {
 		snake.towards = { x: 0, y: 1 }
 	}
+	// console.log(e)
 }
 
 export default app
