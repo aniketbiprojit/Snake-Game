@@ -10,6 +10,7 @@ const app = new App({
 	props: {
 		rows,
 		cols,
+		handleKeyPress,
 	},
 })
 
@@ -77,6 +78,18 @@ class Snake {
 	}
 }
 
-new Snake()
+const snake = new Snake()
+
+function handleKeyPress(e: KeyboardEvent) {
+	if (e.key === 'ArrowDown') {
+		snake.towards = { x: 1, y: 0 }
+	} else if (e.key === 'ArrowUp') {
+		snake.towards = { x: -1, y: 0 }
+	} else if (e.key === 'ArrowLeft') {
+		snake.towards = { x: 0, y: -1 }
+	} else if (e.key === 'ArrowRight') {
+		snake.towards = { x: 0, y: 1 }
+	}
+}
 
 export default app
