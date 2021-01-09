@@ -23,7 +23,7 @@ function createCell(i: number, j: number) {
 	cell.style.height = (size - 2).toString() + 'px'
 	cell.style.width = (size - 2).toString() + 'px'
 	const p = document.createElement('p')
-	// p.innerHTML = (i * rows + j).toString()
+
 	cell.appendChild(p)
 	return cell
 }
@@ -57,14 +57,23 @@ class Snake {
 
 	constructor() {
 		this.draw_snake(0, 0)
+		setInterval(() => this.update(), 100)
 	}
 
 	draw_snake(x: number, y: number) {
 		const old_cell = grid[x][y]
 		if (old_cell.marked) {
-			old_cell.unmark
+			old_cell.unmark()
 		}
-		const cell = grid[this.head.x][this.head.y].mark()
+		grid[this.head.x][this.head.y].mark()
+	}
+
+	update() {
+		const { x, y } = this.head
+		this.head.x = (this.head.x + this.towards.x + rows) % rows
+		this.head.y = (this.head.y + this.towards.y + cols) % cols
+		console.log(this.head)
+		this.draw_snake(x, y)
 	}
 }
 
