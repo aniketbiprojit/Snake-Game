@@ -1,8 +1,9 @@
 import App from './App.svelte'
+import { Cell } from './Cell'
 
-const rows = 10
-const cols = 10
-const size = 40
+const rows = 50
+const cols = 50
+const size = 15
 
 const app = new App({
 	target: document.body,
@@ -12,6 +13,21 @@ const app = new App({
 	},
 })
 
+const grid: Array<Array<Cell>> = Array.from(Array(rows), () => Array(cols))
+
+function createCell(i: number, j: number) {
+	const cell = document.createElement('div')
+	cell.setAttribute('data-x', i.toString())
+	cell.setAttribute('data-y', j.toString())
+	cell.classList.add('cell')
+	cell.style.height = (size - 2).toString() + 'px'
+	cell.style.width = (size - 2).toString() + 'px'
+	const p = document.createElement('p')
+	// p.innerHTML = (i * rows + j).toString()
+	cell.appendChild(p)
+	return cell
+}
+
 function createGrid() {
 	const grid_elem = document.getElementById('grid')
 	grid_elem.style.height = (cols * size).toString() + 'px'
@@ -20,6 +36,7 @@ function createGrid() {
 		for (let j = 0; j < cols; j++) {
 			const cell = createCell(i, j)
 
+			grid[i][j] = new Cell(cell)
 			grid_elem.appendChild(cell)
 		}
 	}
@@ -28,12 +45,3 @@ function createGrid() {
 createGrid()
 
 export default app
-function createCell(i: number, j: number) {
-	const cell = document.createElement('div')
-	cell.setAttribute('data-x', i.toString())
-	cell.setAttribute('data-y', j.toString())
-	const p = document.createElement('p')
-	p.innerHTML = (i * rows + j).toString()
-	cell.appendChild(p)
-	return cell
-}
