@@ -44,4 +44,30 @@ function createGrid() {
 
 createGrid()
 
+type position = {
+	x: number
+	y: number
+}
+
+type direction = { x: -1; y: 0 } | { x: 0; y: -1 } | { x: 1; y: 0 } | { x: 0; y: 1 }
+
+class Snake {
+	head: position = { x: 0, y: 0 }
+	towards: direction = { x: 0, y: 1 }
+
+	constructor() {
+		this.draw_snake(0, 0)
+	}
+
+	draw_snake(x: number, y: number) {
+		const old_cell = grid[x][y]
+		if (old_cell.marked) {
+			old_cell.unmark
+		}
+		const cell = grid[this.head.x][this.head.y].mark()
+	}
+}
+
+new Snake()
+
 export default app
