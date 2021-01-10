@@ -71,13 +71,13 @@ class Snake {
 		this.interval = setInterval(() => this.update(), updateTime)
 	}
 
-	addTail({ x = null, y = null }: { x?: number; y?: number } = {}) {
-		if (x !== null && y != null) {
-			this.tail.push({ x, y })
-		} else {
-			this.add_tail = true
-		}
-	}
+	// addTail({ x = null, y = null }: { x?: number; y?: number } = {}) {
+	// 	if (x !== null && y != null) {
+	// 		this.tail.push({ x, y })
+	// 	} else {
+	// 		this.add_tail = true
+	// 	}
+	// }
 
 	draw_snake(x: number, y: number) {
 		const old_cell = grid[x][y]
@@ -86,33 +86,36 @@ class Snake {
 			old_cell.unmark()
 		}
 		const new_cell = grid[this.head.x][this.head.y]
+		if (new_cell.marked) {
+			alert('GameOver')
+			clearInterval(this.interval)
+		}
 		if (new_cell.food) {
-			if (this.tail.length === 0) this.addTail({ x, y })
-			else this.addTail()
+			this.add_tail = true
 			new_cell.eatFood()
 			score++
 			updateScore()
 			placeFood()
 		}
 		new_cell.mark()
-		const old_tail = Object.assign({}, this.tail)
+		const new_tail = Object.assign([], this.tail)
+
 		for (let index = 0; index < this.tail.length; index++) {
-			const element = this.tail[index]
-			if (index === 0) {
-				this.tail[0] = { x, y }
-				grid[x][y].mark()
+			if (index === 0) new_tail[0] = { x, y }
+			else new_tail[index] = this.tail[index - 1]
+			grid[this.tail[index].x][this.tail[index].y].unmark()
+		}
+		if (this.add_tail === true) {
+			if (this.tail.length === 0) new_tail.push({ x, y })
+			else {
+				new_tail.push(this.tail[this.tail.length - 1])
 			}
-			if (index === this.tail.length - 1) {
-				if (this.add_tail === false) {
-					grid[element.x][element.y].unmark()
-				} else {
-					this.add_tail = false
-				}
-			}
-			if (index !== this.tail.length - 1 && index !== 0) {
-				this.tail[index] = old_tail[index - 1]
-				grid[this.tail[index].x][this.tail[index].y].mark()
-			}
+			this.add_tail = false
+		}
+		this.tail = new_tail
+
+		for (let index = 0; index < this.tail.length; index++) {
+			grid[this.tail[index].x][this.tail[index].y].mark()
 		}
 	}
 
@@ -127,26 +130,38 @@ class Snake {
 
 const snake = new Snake()
 
+let count = 0
+
 function placeFood() {
+	count++
+	if (count > rows * cols * 5) {
+		alert('Exception left.')
+		clearInterval(snake.interval)
+	}
 	const x = Math.floor(Math.random() * rows) % rows
 	const y = Math.floor(Math.random() * cols) % cols
 
-	grid[x][y].placeFood()
+	const foodCell = grid[x][y]
+	if (foodCell.marked) {
+		return placeFood()
+	}
+	foodCell.placeFood()
+	count = 0
 }
 
 function handleKeyPress(e: KeyboardEvent) {
 	if (e.ctrlKey === false) {
 		e.preventDefault()
 	}
-
+	console.log(snake.towards)
 	if (e.key === 'ArrowDown') {
-		snake.towards = { x: 1, y: 0 }
+		if (snake.towards.x !== -1 || snake.tail.length === 0) snake.towards = { x: 1, y: 0 }
 	} else if (e.key === 'ArrowUp') {
-		snake.towards = { x: -1, y: 0 }
+		if (snake.towards.x !== 1 || snake.tail.length === 0) snake.towards = { x: -1, y: 0 }
 	} else if (e.key === 'ArrowLeft') {
-		snake.towards = { x: 0, y: -1 }
+		if (snake.towards.y !== 1 || snake.tail.length === 0) snake.towards = { x: 0, y: -1 }
 	} else if (e.key === 'ArrowRight') {
-		snake.towards = { x: 0, y: 1 }
+		if (snake.towards.y !== -1 || snake.tail.length === 0) snake.towards = { x: 0, y: 1 }
 	}
 }
 
