@@ -17,6 +17,7 @@ const app = new App({
 		cols,
 		handleKeyPress,
 		score,
+		clickHandler,
 	},
 })
 
@@ -152,6 +153,25 @@ function placeFood() {
 	}
 	foodCell.placeFood()
 	count = 0
+}
+
+async function clickHandler(val: 'up' | 'down' | 'left' | 'right') {
+	switch (val) {
+		case 'down':
+			if (snake.towards.x !== -1 || snake.tail.length === 0) snake.towards = { x: 1, y: 0 }
+			break
+		case 'up':
+			if (snake.towards.x !== 1 || snake.tail.length === 0) snake.towards = { x: -1, y: 0 }
+			break
+		case 'left':
+			if (snake.towards.y !== 1 || snake.tail.length === 0) snake.towards = { x: 0, y: -1 }
+			break
+		case 'right':
+			if (snake.towards.y !== -1 || snake.tail.length === 0) snake.towards = { x: 0, y: 1 }
+			break
+		default:
+			break
+	}
 }
 
 async function handleKeyPress(e: KeyboardEvent) {
