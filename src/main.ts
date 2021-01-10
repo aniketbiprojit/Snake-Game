@@ -153,7 +153,7 @@ function handleKeyPress(e: KeyboardEvent) {
 	if (e.ctrlKey === false) {
 		e.preventDefault()
 	}
-	console.log(snake.towards)
+	// console.log(snake.towards)
 	if (e.key === 'ArrowDown') {
 		if (snake.towards.x !== -1 || snake.tail.length === 0) snake.towards = { x: 1, y: 0 }
 	} else if (e.key === 'ArrowUp') {

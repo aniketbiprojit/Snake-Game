@@ -16,4 +16,7 @@
 	<h1>Snake</h1>
 	<div class="grid" id="grid" />
 	<h4>{rows} Rows, {cols} Cols, <span id="score">{score}</span> Score</h4>
+	<li>
+		Quick keypresses might confuse the system. Doesn't run a physics engine.
+	</li>
 </main>
