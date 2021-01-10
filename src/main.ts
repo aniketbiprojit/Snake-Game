@@ -8,21 +8,33 @@ const updateTime = 150
 
 let score = 0
 
+let highestScore = 0
+
 let fired = false
 
 const app = new App({
 	target: document.body,
 	props: {
-		rows,
-		cols,
+		// rows,
+		// cols,
 		handleKeyPress,
 		score,
 		clickHandler,
 	},
 })
 
+const high_var = 'high'
+if (localStorage.getItem(high_var)) {
+	highestScore = parseInt(localStorage.getItem(high_var))
+	updateHighest()
+}
+
 function updateScore() {
 	document.getElementById('score').innerHTML = score.toString()
+}
+
+function updateHighest() {
+	document.getElementById('highest_score').innerHTML = highestScore.toString()
 }
 
 const grid: Array<Array<Cell>> = Array.from(Array(rows), () => Array(cols))
@@ -91,12 +103,15 @@ class Snake {
 		const new_cell = grid[this.head.x][this.head.y]
 		if (new_cell.marked) {
 			alert('GameOver')
+			if (score > highestScore) localStorage.setItem(high_var, score.toString())
+			highestScore = score
+			updateHighest()
 			clearInterval(this.interval)
 		}
 		if (new_cell.food) {
 			this.add_tail = true
 			new_cell.eatFood()
-			score++
+			score += 100
 			updateScore()
 			placeFood()
 		}
@@ -131,6 +146,8 @@ class Snake {
 		this.head.y = (this.head.y + this.towards.y + cols) % cols
 
 		this.draw_snake(x, y)
+		if (this.tail.length > 0) score--
+		updateScore()
 	}
 }
 

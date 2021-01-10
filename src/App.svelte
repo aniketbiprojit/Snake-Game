@@ -23,6 +23,15 @@
 	p {
 		margin-top: 0;
 	}
+	.center_ {
+		display: flex;
+		padding: 0 10px;
+		flex-wrap: wrap;
+		width: calc(400px - 20px);
+		height: 40px;
+		justify-content: space-between;
+		margin-bottom: 10px;
+	}
 	.buttons {
 		display: flex;
 		flex-wrap: wrap;
@@ -53,8 +62,10 @@
 		Quick keypresses might confuse the system. Doesn't run a physics engine
 		but playable.
 	</p>
-	<p>Use keybord or touch.</p>
-	<h4><span id="score">{score}</span> Score</h4>
+	<div class="center_">
+		<h4>Score: <span id="score">{score}</span></h4>
+		<h4>Highest Score: <span id="highest_score">{score}</span></h4>
+	</div>
 	<div class="grid" id="grid" />
 	<div class="buttons">
 		<div on:click={() => handleClick('up')} class="inner-btn up">
