@@ -95,3 +95,10 @@ h1 {
 .food {
 	background-color: #fd413c;
 }
+
+.inner-btn {
+	border-radius: 10px;
+	border: 1px solid #2d3136;
+	color: #fd413c;
+	cursor: pointer;
+}
