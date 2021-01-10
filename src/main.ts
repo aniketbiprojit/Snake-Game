@@ -8,6 +8,8 @@ const updateTime = 150
 
 let score = 0
 
+let fired = false
+
 const app = new App({
 	target: document.body,
 	props: {
@@ -32,7 +34,7 @@ function createCell(i: number, j: number) {
 	cell.style.height = (size - 2).toString() + 'px'
 	cell.style.width = (size - 2).toString() + 'px'
 	const p = document.createElement('p')
-	p.innerHTML = `${i},${j}`
+	// p.innerHTML = `${i},${j}`
 	cell.appendChild(p)
 	return cell
 }
@@ -117,6 +119,9 @@ class Snake {
 		for (let index = 0; index < this.tail.length; index++) {
 			grid[this.tail[index].x][this.tail[index].y].mark()
 		}
+		if (fired === true) {
+			fired = false
+		}
 	}
 
 	update() {
@@ -149,11 +154,17 @@ function placeFood() {
 	count = 0
 }
 
-function handleKeyPress(e: KeyboardEvent) {
+async function handleKeyPress(e: KeyboardEvent) {
 	if (e.ctrlKey === false) {
 		e.preventDefault()
 	}
-	// console.log(snake.towards)
+	if (fired === true) {
+		await new Promise((resolve) => {
+			setTimeout(resolve, 150)
+		})
+	}
+	fired = true
+
 	if (e.key === 'ArrowDown') {
 		if (snake.towards.x !== -1 || snake.tail.length === 0) snake.towards = { x: 1, y: 0 }
 	} else if (e.key === 'ArrowUp') {

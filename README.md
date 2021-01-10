@@ -1,3 +1,3 @@
-## Snake Game  
+## Snake Game
 
--   Live Site: gh
+-   Live Site: https://git.aniketbiprojit.me/Snake-Game/index.html
