@@ -103,8 +103,10 @@ class Snake {
 		const new_cell = grid[this.head.x][this.head.y]
 		if (new_cell.marked) {
 			alert('GameOver')
-			if (score > highestScore) localStorage.setItem(high_var, score.toString())
-			highestScore = score
+			if (score > highestScore) {
+				localStorage.setItem(high_var, score.toString())
+				highestScore = score
+			}
 			updateHighest()
 			clearInterval(this.interval)
 		}
