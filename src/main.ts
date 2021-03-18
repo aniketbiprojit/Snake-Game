@@ -20,6 +20,7 @@ const app = new App({
 		handleKeyPress,
 		score,
 		clickHandler,
+		restart,
 	},
 })
 
@@ -94,6 +95,16 @@ class Snake {
 	// 	}
 	// }
 
+	killme() {
+		clearInterval(this.interval)
+		grid[this.head.x][this.head.y].unmark()
+		for (let index = 0; index < this.tail.length; index++) {
+			const tail_elem = this.tail[index]
+			grid[tail_elem.x][tail_elem.y].unmark()
+		}
+		score = 0
+	}
+
 	draw_snake(x: number, y: number) {
 		const old_cell = grid[x][y]
 
@@ -153,9 +164,16 @@ class Snake {
 	}
 }
 
-const snake = new Snake()
+let snake = new Snake()
 
 let count = 0
+
+function restart() {
+	snake.killme()
+	setTimeout(() => {
+		snake = new Snake()
+	}, 1000)
+}
 
 function placeFood() {
 	count++
